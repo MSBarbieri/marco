@@ -17,16 +17,14 @@ use opentelemetry::{
     trace::TraceError,
 };
 
+}
+}
 type BoxError = Box<dyn std::error::Error + Send + Sync>;
-}
-}
 
 #[derive(Error, Debug)]
 pub enum TracingError {
-    #[cfg(feature = "trace")]
     #[error("Failed to connect with opentelemetry '{0}'")]
     ConnectionFailed(#[from] BoxError),
-    #[cfg(feature = "trace")]
     #[error("Failed to set global output'{0}'")]
     SetGlobalDefaultError(#[from] SetGlobalDefaultError),
 }
