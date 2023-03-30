@@ -1,6 +1,7 @@
 mod utils;
 
 use wasm_bindgen::prelude::*;
+use web_sys::console;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -8,20 +9,15 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[wasm_bindgen]
+#[wasm_bindgen()]
 extern "C" {
     fn alert(s: &str);
 }
 
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, web-runtime!");
-}
-
-#[wasm_bindgen]
+#[wasm_bindgen(start)]
 pub fn run() -> Result<(), JsValue> {
     utils::set_panic_hook();
 
-    alert("Hello, web-runtime!");
+    console::log_1(&JsValue::from_str("Hello world!"));
     Ok(())
 }

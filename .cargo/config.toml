@@ -1,2 +1,3 @@
 [alias]
 server = "run --package server --"
+web = "run --package xtask --"

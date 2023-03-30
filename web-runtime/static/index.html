@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Hello Wasm</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link href="css/style.css" rel="stylesheet"> -->
+  <script type="module">
+    import init from '/web-runtime.js';
+    init(new URL('/web-runtime.wasm', import.meta.url));
+  </script>
+</head>
+
+<body>
+  Hello World!
+
+</body>
+
+</html>
