@@ -1,4 +1,5 @@
 use clap::ValueEnum;
+use log::SetLoggerError;
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Default, ValueEnum)]
 
 pub enum LogLevel {
@@ -31,4 +32,14 @@ impl ToString for LogLevel {
             LogLevel::Error => "error".to_string(),
         }
     }
+}
+
+pub fn start_logger(log_level: &LogLevel) -> Result<(), SetLoggerError> {
+    let log_level = log_level.to_string();
+    std::env::set_var(
+        "RUST_LOG",
+        format!("{},axum_tracing_opentelemetry=info,otel=debug", log_level),
+    );
+    env_logger::try_init()?;
+    Ok(())
 }
