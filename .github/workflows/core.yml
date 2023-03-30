@@ -1,0 +1,62 @@
+name: core 
+on: 
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+env:
+  RUSTFLAGS: -Dwarnings
+# Make sure CI fails on all warnings, including Clippy lints
+jobs:
+  test:
+    name: Test suite 
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        toolchain: [stable, beta]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+      - name: Install ${{ matrix.toolchain }}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - name: cargo generate-lockfile 
+        if: hashFiles('Cargo.lock') == ''
+        run: cargo generate-lockfile
+      - name: cargo test locked
+        run: cargo test --locked --all-features --all-targets
+  coverage:
+    runs-on: ubuntu-latest
+    name: ubuntu / coverage
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+      - name: Install stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - name: cargo install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+      - name: cargo generate-lockfile
+        if: hashFiles('Cargo.lock') == ''
+        run: cargo generate-lockfile
+      - name: cargo llvm-cov clean
+        run: cargo llvm-cov clean --workspace
+      - name: cargo llvm-cov
+        run: cargo llvm-cov --locked --all-features --no-report --release
+      - name: cargo llvm-cov report
+        run: cargo llvm-cov report --release --lcov --output-path lcov.info
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true

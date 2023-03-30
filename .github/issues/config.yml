@@ -1,0 +1,6 @@
+contact_links:
+  - name: docs
+    url: https://github.com/MSBarbieri/backend-rust-axum
+  - name: Support questions
+    email: matheussouzabarbieri@gmail.com
+    about: to know more about this project
