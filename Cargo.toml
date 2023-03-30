@@ -1,2 +1,15 @@
 [workspace]
-members = ["common", "server", "benchmarks", "cli", "web-runtime", "runtime"]
+members = [
+  "common",
+  "server",
+  "benchmarks",
+  "cli",
+  "web-runtime",
+  "runtime",
+]
+
+[profile.release]
+# This makes the compiled code faster and smaller, but it makes compiling slower,
+# so it's only enabled in release mode.
+lto = true
+opt-level = "s"

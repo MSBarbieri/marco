@@ -9,6 +9,8 @@ definitions = "Marco server side renderer"
 path = "src/lib.rs"
 
 [dependencies]
+common = { path = "../common" }
+runtime = { path = "../runtime" }
 axum = { version = "0.6.11", features = ["ws"] }
 cfg-if = "1.0.0"
 clap = { version = "4.1.11", features = ["derive"] }
