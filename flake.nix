@@ -1,6 +1,5 @@
 {
   inputs = {
-    naersk.url = "github:nix-community/naersk/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     utils.url = "github:numtide/flake-utils";
     fenix = {
@@ -13,7 +12,6 @@
     { self
     , nixpkgs
     , utils
-    , naersk
     , fenix
     , pre-commit-hooks
     ,
@@ -38,24 +36,8 @@
         targets.wasm32-unknown-unknown.latest.rust-std
       ];
 
-      naersk-lib = (naersk.lib.${system}.override {
-        cargo = toolchain;
-        rustc = toolchain;
-      });
     in
     {
-      defaultPackage = naersk-lib.buildPackage {
-        src = ./.;
-
-        nativeBuildInputs = [ pkgs.pkg-config ];
-        buildInputs = with pkgs; [
-          wasm-pack
-          openssl
-          protobuf
-          pkg-config
-        ];
-        RUST_LOG = "trace";
-      };
       checks = {
         pre-commit-check = pre-commit-hooks.lib.${system}.run {
           src = ./.;
@@ -71,7 +53,7 @@
         };
       };
 
-      devShell = nixpkgs.legacyPackages.${system}.mkShell {
+      devShells.default = pkgs.mkShell {
         inherit (self.checks.${system}.pre-commit-check) shellHook;
 
         buildInputs = with pkgs; [
