@@ -9,13 +9,8 @@ use web_sys::console;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[wasm_bindgen()]
-extern "C" {
-    fn alert(s: &str);
-}
-
 #[wasm_bindgen(start)]
-pub fn run() -> Result<(), JsValue> {
+pub async fn run() -> Result<(), JsValue> {
     utils::set_panic_hook();
 
     console::log_1(&JsValue::from_str("Hello world!"));

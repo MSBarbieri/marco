@@ -1,7 +1,7 @@
 use clap::ValueEnum;
 use log::SetLoggerError;
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Default, ValueEnum)]
-
+use serde::Deserialize;
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Default, ValueEnum, Deserialize)]
 pub enum LogLevel {
     #[default]
     Debug,

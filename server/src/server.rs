@@ -1,3 +1,4 @@
+use crate::settings::Settings;
 use axum::{response::IntoResponse, routing::get, Router};
 use cfg_if::cfg_if;
 use std::net::SocketAddr;
@@ -38,12 +39,15 @@ pub fn set_layer(router: Router) -> Router {
     router
 }
 
-pub async fn create_server(cli: crate::cli::Cli) -> Result<(), ServerError> {
-    let addr: SocketAddr = cli.address.parse().unwrap();
+pub async fn create_server(settings: Settings) -> Result<(), ServerError> {
+    let addr: SocketAddr = settings.address.parse().unwrap();
     #[allow(unused_mut)] // this mut is used when is builded with telemetry enable.
     let mut router = configure_routes();
     router = set_layers(router);
-    log::info!("Server Started with address: {:?}", cli.address.clone());
+    log::info!(
+        "Server Started with address: {:?}",
+        settings.address.clone()
+    );
     axum::Server::bind(&addr)
         .serve(router.into_make_service())
         .await?;

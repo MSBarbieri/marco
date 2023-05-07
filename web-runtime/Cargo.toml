@@ -1,8 +1,10 @@
+cargo-features = ["per-package-target"]
 [package]
 name = "web-runtime"
 version = "0.1.0"
 authors = ["MSBarbieri <matheussouzabarbieri@gmail.com>"]
 edition = "2018"
+default-target = "wasm32-unknown-unknown"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -10,7 +12,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 wasm-bindgen = "0.2.64"
 
-web-sys = { version = "0.3.22", features = ["console"] }
+web-sys = { version = "0.3.22", features = ["console", "Blob", "Window", "Request", "Response", "RequestInit", "RequestMode", "RequestCredentials", "WebSocket", "Headers", "MessageEvent", "ErrorEvent", "BinaryType", "css"] }
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
@@ -21,6 +23,8 @@ console_error_panic_hook = { version = "0.1.6", optional = true }
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
 wee_alloc = { version = "0.4.5", optional = true }
+js-sys = "0.3.61"
+wasm-bindgen-futures = "0.4.34"
 
 [features]
 default = ["console_error_panic_hook", "wee_alloc"]

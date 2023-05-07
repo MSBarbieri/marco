@@ -10,6 +10,7 @@ enum Opt {
 
 fn main() -> Result<()> {
     let opt: Opt = clap::Parser::parse();
+    env_logger::init();
 
     match opt {
         Opt::Dist(dist) => {
